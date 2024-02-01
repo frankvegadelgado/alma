@@ -8,7 +8,7 @@ Question: Is there exists a truth assignment such that each clause contains exac
 
 # Research
 
-This work is based on the manuscript [Note for the Millennium Prize Problems](https://www.researchgate.net/publication/377808644_Note_for_the_Millennium_Prize_Problems).
+This work is based on the manuscripts [Note for the Millennium Prize Problems](https://www.researchgate.net/publication/377808644_Note_for_the_Millennium_Prize_Problems) and [Note for the P versus NP Problem](https://www.researchgate.net/publication/377656601_Note_for_the_P_versus_NP_Problem).
 
 # Theory
 
