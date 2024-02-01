@@ -1,41 +1,45 @@
-# ALMA| SAT Solver
+# ALMA| MONOTONE 1-IN-3 3SAT Solver
 
-Instance: A Boolean formula $\phi$ in CNF.
+Instance: A Boolean formula $\phi$ in 3CNF with monotone clauses (meaning the variables are never negated).
 
-Question: Is $\phi$ satisfiable?
+Question: Is there exists a truth assignment such that each clause contains exactly one true literal?
  
 **Note: This problem is NP-complete (If any NP-complete can be solved in polynomial time, then $P = NP$)**.
 
+# Research
+
+This work is based on the manuscript [Note for the Millennium Prize Problems](https://www.researchgate.net/publication/377808644_Note_for_the_Millennium_Prize_Problems).
+
 # Theory
 
-- A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. 
+- A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. A Boolean formula is in 3-conjunctive normal form or 3CNF, if each clause has exactly three distinct literals.
 
-- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. A satisfying truth assignment is a truth assignment that causes $\phi$ to be evaluated as true. A Boolean formula with a satisfying truth assignment is satisfiable. The problem SAT asks whether a given Boolean formula $\phi$ in CNF is satisfiable.
+- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem MONOTONE 1-IN-3 3SAT asks whether a given Boolean formula $\phi$ in 3CNF has a truth assignment such that each clause contains exactly one true literal.
 
 Example
 ----- 
 
-Instance: The Boolean formula $(x_{1} \vee \rightharpoondown x_{3} \vee \rightharpoondown x_{2}) \wedge (x_{3} \vee x_{2} \vee x_{4})$ where $\vee$ (OR), $\wedge$ (AND) and $\rightharpoondown$ (NEGATION) are the logic operations.
+Instance: The Boolean formula $(x_{1} \vee x_{2} \vee x_{3}) \wedge (x_{4} \vee x_{2} \vee x_{3})$ where $\vee$ (OR) and $\wedge$ (AND) are the logic operations.
 
-Answer: Satisfiable (the formula is satisfiable since we can assign simultaneously the variables $x_{1}$ and $x_{3}$ as true to obtain a satisfying truth assignment).
+Answer: Yes (we can assign simultaneously the variables $x_{1}$ and $x_{4}$ as true while $x_{2}$ and $x_{3}$ as false from a truth assignment to the formula).
 
 Input of this project
 -----
 
 The input is on [DIMACS](http://www.satcompetition.org/2009/format-benchmarks2009.html) formula with the extension .cnf.
   
-Let's take as the **file.cnf** from our previous example: The Boolean formula $(x_{1} \vee \rightharpoondown x_{3} \vee \rightharpoondown x_{2}) \wedge (x_{3} \vee x_{2} \vee x_{4})$ is
+Let's take as the **accept.cnf** from our previous example: The Boolean formula $(x_{1} \vee \rightharpoondown x_{3} \vee \rightharpoondown x_{2}) \wedge (x_{3} \vee x_{2} \vee x_{4})$ is
 ```  
 p cnf 4 2
-1 -3 -2 0
-3 2 4 0
+1 2 3 0
+4 2 3 0
 ```  
 
 - The first line **p cnf 4 2** means there are 4 variables and 2 clauses.
 
-- The second line **1 -3 -2 0** means the clause $(x_{1} \vee \rightharpoondown x_{3} \vee \rightharpoondown x_{2})$ (Note that, the number *0* means the end of the clause).
+- The second line **1 2 3 0** means the clause $(x_{1} \vee x_{2} \vee x_{3})$ (Note that, the number *0* means the end of the clause).
 
-- The third line **3 2 4 0** means the clause $(x_{3} \vee x_{2} \vee x_{4})$ (Note that, the number *0* means the end of the clause).
+- The third line **4 2 3 0** means the clause $(x_{4} \vee x_{2} \vee x_{3})$ (Note that, the number *0* means the end of the clause).
 
 # Compile and Environment
 
@@ -68,39 +72,33 @@ cd alma
 On alma directory run
 
 ```
-python solver.py -i file.cnf
+python solver.py -i accept.cnf
 ```
 
 Finally, it would obtain in the console output:
 
 ```
-s SATISFIABLE
+YES
 ```
 
-# **SAT Benchmarks** 
-
-We can run the DIMACS files with the extension .cnf in the simplest benchmarks folder:
+otherwise if we take a non-acceptance instance 
 
 ```
->  python solver.py -i .\bin\simplest\aim-50-1_6-yes1-1.cnf
-s SATISFIABLE
+python solver.py -i reject.cnf
 ```
 
-and
+then it would obtain in the console output:
 
 ```
-> python solver.py -i .\bin\simplest\aim-50-1_6-no-1.cnf
-s UNSATISFIABLE
+NO
 ```
 
-We obtain this result since those files were copied into the directory alba\bin\simplest:
+# Complexity
 
-```
-aim-50-1_6-yes1-1.cnf
-aim-50-1_6-no-1.cnf
-```
-
-from this well-known dataset [SAT Benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/Benchmarks/SAT/DIMACS/AIM/descr.html). 
+````diff
++ We solve this problem in polynomial time using dynamic programming.
++ Consequently, we deduce that $P = NP$.
+````
 
 # Code
 
