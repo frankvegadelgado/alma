@@ -94,7 +94,7 @@ def parse_dimacs(asserts):
             l = []
             expr = list(set(expr))
             if len(expr) != 3:
-                raise Exception("The Boolean formula must exactly 3 variables per each clause")
+                raise Exception("The Boolean formula must contain exactly 3 variables per each clause")
             for t in expr:
                 v = int(t)
                 l.append(v)
