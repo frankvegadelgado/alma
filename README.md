@@ -97,7 +97,7 @@ NO
 
 ````diff
 + We solve this problem in polynomial time using dynamic programming.
-+ Consequently, we deduce that $P = NP$.
++ Consequently, we deduce that P = NP.
 ````
 
 # Code
