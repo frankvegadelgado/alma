@@ -86,6 +86,23 @@ cd alma
 <p>then it would obtain in the console output:</p>
 <pre><code>NO
 </code></pre>
+<h1>Command Options</h1>
+<p>On alma directory if you run</p>
+<pre><code>python solver.py -h
+</code></pre>
+<p>then you will obtain the following output</p>
+<pre><code>usage: solver.py [-h] -i INPUTFILE [-v] [-t]
+
+Solve an NP-complete problem from a DIMACS file.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUTFILE, --inputFile INPUTFILE
+                        Input file path
+  -v, --verbose         Enable verbose output
+  -t, --timer           Enable timer output
+</code></pre>
+<p>where it is described all the possible options.</p>
 <h1>Complexity</h1>
 <pre><code class="language-diff">+ We solve this problem in polynomial time using dynamic programming.
 + Consequently, we deduce that P = NP.

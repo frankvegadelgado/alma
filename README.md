@@ -93,6 +93,31 @@ then it would obtain in the console output:
 NO
 ```
 
+# Command Options
+
+On alma directory if you run
+
+```
+python solver.py -h
+```
+
+then you will obtain the following output
+
+```
+usage: solver.py [-h] -i INPUTFILE [-v] [-t]
+
+Solve an NP-complete problem from a DIMACS file.
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUTFILE, --inputFile INPUTFILE
+                        Input file path
+  -v, --verbose         Enable verbose output
+  -t, --timer           Enable timer output
+```
+
+where it is described all the possible options.
+
 # Complexity
 
 ````diff
