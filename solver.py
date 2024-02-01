@@ -1,11 +1,9 @@
 #                          SAT Solver
 #                          Frank Vega
 #                        February 1, 2024
-#        We use Z3 that is a theorem prover from Microsoft Research.
 
 import argparse
 import sys
-import z3
 import collections
 import time
 mapped = {}

@@ -48,16 +48,6 @@ Downloading and Installing
 
 Install Python 3.0 or a greater version 
 
-Download and Install the following Number Theory Library 
-
-- Z3 is a theorem prover from Microsoft Research with support for bitvectors, booleans, arrays, floating point numbers, strings, and other data types.
-
-If you use pip, you can install Z3 with:
------
-```
-pip install z3-solver
-```
-
 -----
 
 # Build and Execute
