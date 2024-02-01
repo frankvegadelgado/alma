@@ -46,7 +46,7 @@ p cnf 4 2
 Downloading and Installing
 -----
 
-Install at least Python 2.7 or a greater version 
+Install Python 3.0 or a greater version 
 
 Download and Install the following Number Theory Library 
 
