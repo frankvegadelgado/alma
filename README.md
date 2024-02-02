@@ -28,7 +28,7 @@ Input of this project
 
 The input is on [DIMACS](http://www.satcompetition.org/2009/format-benchmarks2009.html) formula with the extension .cnf.
   
-Let's take as the **accept.cnf** from our previous example: The Boolean formula $(x_{1} \vee \rightharpoondown x_{3} \vee \rightharpoondown x_{2}) \wedge (x_{3} \vee x_{2} \vee x_{4})$ is
+Let's take as the **accept.cnf** from our previous example: The Boolean formula $(x_{1} \vee x_{2} \vee x_{3}) \wedge (x_{4} \vee x_{2} \vee x_{3})$ is
 ```  
 p cnf 4 2
 1 2 3 0

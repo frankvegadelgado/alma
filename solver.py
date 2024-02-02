@@ -1,4 +1,4 @@
-#                          SAT Solver
+#                   MONOTONE 1-IN-3 3SAT Solver
 #                          Frank Vega
 #                        February 1, 2024
 
