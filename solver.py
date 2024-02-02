@@ -1,15 +1,16 @@
-#                   MONOTONE 1-IN-3 3SAT Solver
+#                         WX2SAT Solver
 #                          Frank Vega
-#                        February 1, 2024
+#                        February 2, 2024
 
 import argparse
 import sys
 import collections
 import time
 mapped = {}
-f = {}
-g = {}
-h = {}
+fplus = {}
+gplus = {}
+fminus = {}
+gminus = {}
 log = False
 timed = False
 started = 0.0
@@ -23,8 +24,8 @@ def graph(node):
     if node[0] >= len(mapped):
         return []
     else:
-        return [(node[0]+1, node[1]+f[node[0]+1]+g[node[0]+1]+h[node[0]+1], node[2]+f[node[0]+1]+h[node[0]+1], node[3]-g[node[0]+1]-h[node[0]+1]), 
-        (node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
+        return [(node[0]+1, node[1]+1, node[2]+fplus[node[0]+1]-gminus[node[0]+1], node[3]+fminus[node[0]+1]-gplus[node[0]+1]), 
+        (node[0]+1, node[1], node[2]+fminus[node[0]+1]-gplus[node[0]+1], node[3]+fplus[node[0]+1]-gminus[node[0]+1])]
 
 def bfs(start):
     
@@ -36,12 +37,14 @@ def bfs(start):
     visited = set()
     queue = collections.deque([start])
     visited.add(start)
-
+    hash = {}
+    
     while queue:
         node = queue.popleft()
         neighbors = graph(node)
         for neighbor in neighbors:
             if neighbor not in visited:
+                hash[neighbor] = node
                 visited.add(neighbor)
                 queue.append(neighbor)
 
@@ -52,7 +55,7 @@ def bfs(start):
     
                 
                 
-    return visited
+    return (visited, hash)
 
 
 def fill_data(clauses):
@@ -63,16 +66,21 @@ def fill_data(clauses):
         started = time.time()
     
     for z in mapped:
-        f[z], g[z], h[z] = 0, 0, 0
+        fplus[z], gplus[z], fminus[z], gminus[z] = 0, 0, 0, 0
         for list in clauses:
             if z in list:
                 arr = [y for y in list if z != y]
-                if z < arr[0] and z < arr[1]:
-                    f[z] = f[z] + 1
-                elif z > arr[0] and z > arr[1]:
-                    g[z] = g[z] + 1
+                if z < abs(arr[0]):
+                    fplus[z] = fplus[z] + 1
                 else:
-                    h[z] = h[z] + 1
+                    gplus[z] = gplus[z] + 1
+            elif -z in list:
+                arr = [y for y in list if -z != y]
+                if z < abs(arr[0]):
+                    fminus[z] = fminus[z] + 1
+                else:
+                    gminus[z] = gminus[z] + 1
+                
                             
     if timed:
         logging(f"Done storing the memory data in: {(time.time() - started) * 1000.0} milliseconds")
@@ -91,14 +99,12 @@ def parse_dimacs(asserts):
             expr = expr[:-1]
             l = []
             expr = list(set(expr))
-            if len(expr) != 3:
-                raise Exception("The Boolean formula must contain exactly 3 variables per each clause")
+            if len(expr) != 2:
+                raise Exception("The Boolean formula must contain exactly 2 variables per each clause")
             for t in expr:
                 v = int(t)
                 l.append(v)
                 value = abs(v)
-                if value != v:
-                    raise Exception("The Boolean formula must not contain negated variables")
                 if value not in mapped:
                     mapped[value] = True
             result.append(l)        
@@ -133,9 +139,23 @@ if __name__ == "__main__":
     fill_data(clauses)
     
     
-    states = bfs((0, 0, 0, 0))
-    acceptance = (len(mapped), len(clauses), 0, 0)
-    if acceptance not in states:
+    (visited, hash) = bfs((0, 0, 0, 0))
+    accept = False
+    
+    for k in range(len(mapped)):
+        acceptance = (len(mapped), k+1, 0, 0)
+        if acceptance in visited:
+            truth = []
+            while acceptance != (0, 0, 0, 0):
+                node = hash[acceptance]
+                neighbors = graph(node)
+                if neighbors[0] == acceptance:
+                    truth.append(acceptance[0])
+                acceptance = node
+            if len(truth) == k+1:        
+                print("YES")
+                print(truth, sep=", ")
+                accept = True
+                break
+    if not accept:
         print("NO")
-    else:
-        print("YES")

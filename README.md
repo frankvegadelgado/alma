@@ -1,8 +1,8 @@
-# ALMA| MONOTONE 1-IN-3 3SAT Solver
+# ALMA| WX2SAT Solver
 
-Instance: A Boolean formula $\phi$ in 3CNF with monotone clauses (meaning the variables are never negated).
+Instance: A Boolean formula $\phi$ in 2CNF using logic operators $\oplus$ (instead of using the operator $\vee$) and a positive integer $k$.
 
-Question: Is there exists a truth assignment such that each clause contains exactly one true literal?
+Question: Is there exists a satisfying truth assignment in which at most $k$ of the variables are true?
  
 **Note: This problem is NP-complete (If any NP-complete can be solved in polynomial time, then $P = NP$)**.
 
@@ -12,41 +12,41 @@ This work is based on the manuscripts [Note for the Millennium Prize Problems](h
 
 # Theory
 
-- A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. A Boolean formula is in 3-conjunctive normal form or 3CNF, if each clause has exactly three distinct literals.
+- A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. A Boolean formula is in 2-conjunctive normal form or 2CNF, if each clause has exactly two distinct literals.
 
-- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem MONOTONE 1-IN-3 3SAT asks whether a given Boolean formula $\phi$ in 3CNF has a truth assignment such that each clause contains exactly one true literal.
+- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Weighted Xor 2-satisfiability problem (WX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at most $k$ true variables using logic operators $\oplus$.
 
 Example
 ----- 
 
-Instance: The Boolean formula $(x_{1} \vee x_{2} \vee x_{3}) \wedge (x_{4} \vee x_{2} \vee x_{3})$ where $\vee$ (OR) and $\wedge$ (AND) are the logic operations.
+Instance: The Boolean formula $(x_{1} \oplus x_{2}) \wedge (x_{2} \oplus \rightharpoondown x_{3})$ where $\oplus$ (XOR), $\wedge$ (AND) and $\rightharpoondown$ (NOT) are the logic operations.
 
-Answer: Yes (we can assign simultaneously the variables $x_{1}$ and $x_{4}$ as true while $x_{2}$ and $x_{3}$ as false from a truth assignment to the formula).
+Answer: Yes (we can assign the variables $x_{1}$ as true from a truth assignment to the formula).
 
 Input of this project
 -----
 
 The input is on [DIMACS](http://www.satcompetition.org/2009/format-benchmarks2009.html) formula with the extension .cnf.
   
-Let's take as the **accept.cnf** from our previous example: The Boolean formula $(x_{1} \vee x_{2} \vee x_{3}) \wedge (x_{4} \vee x_{2} \vee x_{3})$ is
+Let's take as the **accept.cnf** from our previous example: The Boolean formula $(x_{1} \oplus x_{2}) \wedge (x_{2} \oplus \rightharpoondown x_{3})$ is
 ```  
-p cnf 4 2
-1 2 3 0
-4 2 3 0
+p cnf 3 2
+1 2 0
+2 -3 0
 ```  
 
-- The first line **p cnf 4 2** means there are 4 variables and 2 clauses.
+- The first line **p cnf 3 2** means there are 3 variables and 2 clauses.
 
-- The second line **1 2 3 0** means the clause $(x_{1} \vee x_{2} \vee x_{3})$ (Note that, the number *0* means the end of the clause).
+- The second line **1 2 0** means the clause $(x_{1} \oplus x_{2})$ (Note that, the number *0* means the end of the clause).
 
-- The third line **4 2 3 0** means the clause $(x_{4} \vee x_{2} \vee x_{3})$ (Note that, the number *0* means the end of the clause).
+- The third line **2 -3 0** means the clause $(x_{2} \oplus \rightharpoondown x_{3})$ (Note that, the number *0* means the end of the clause).
 
 # Compile and Environment
 
 Downloading and Installing
 -----
 
-Install Python 3.0 or a greater version 
+Download and Install Python 3.0 or a greater version 
 
 -----
 
@@ -69,6 +69,7 @@ Finally, it would obtain in the console output:
 
 ```
 YES
+[1]
 ```
 
 otherwise if we take a non-acceptance instance 
