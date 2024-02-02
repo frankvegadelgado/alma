@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>ALMA| WX2SAT Solver</title>
+<title>ALMA| MWX2SAT Solver</title>
 <style>
 body {
   background-color: black;
@@ -22,8 +22,8 @@ code.language-diff {background-color: while; color: red;}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js"></script>
 </head>
 <body>
-<h1>ALMA| WX2SAT Solver</h1>
-<p>Instance: A Boolean formula $\phi$ in 2CNF using logic operators $\oplus$ (instead of using the operator $\vee$) and a positive integer $k$.</p>
+<h1>ALMA| MWX2SAT Solver</h1>
+<p>Instance: An $n$-variable $2CNF$ formula with monotone clauses (meaning the variables are never negated) using logic operators $\oplus$ (instead of using the operator $\vee$) and a positive integer $k$.</p>
 <p>Question: Is there exists a satisfying truth assignment in which at most $k$ of the variables are true?</p>
 <p><strong>Note: This problem is NP-complete (If any NP-complete can be solved in polynomial time, then $P = NP$)</strong>.</p>
 <h1>Research</h1>
@@ -34,18 +34,18 @@ code.language-diff {background-color: while; color: red;}
 <p>A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. A Boolean formula is in 2-conjunctive normal form or 2CNF, if each clause has exactly two distinct literals.</p>
 </li>
 <li>
-<p>A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Weighted Xor 2-satisfiability problem (WX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at most $k$ true variables using logic operators $\oplus$ (instead of using the operator $\vee$).</p>
+<p>A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Monotone Weighted Xor 2-satisfiability problem (MWX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at most $k$ true variables using logic operators $\oplus$ on monotone clauses.</p>
 </li>
 </ul>
 <h2>Example</h2>
-<p>Instance: The Boolean formula $(x_{1} \oplus x_{2}) \wedge (x_{2} \oplus \rightharpoondown x_{3})$ where $\oplus$ (XOR), $\wedge$ (AND) and $\rightharpoondown$ (NOT) are the logic operations.</p>
-<p>Answer: Yes (we can assign the variables $x_{1}$ as true from a truth assignment to the formula).</p>
+<p>Instance: The Boolean formula $(x_{1} \oplus x_{2}) \wedge (x_{2} \oplus x_{3})$ where $\oplus$ (XOR) and $\wedge$ (AND) are the logic operations.</p>
+<p>Answer: Yes (we can assign the variables $x_{2}$ as true from a truth assignment to the formula).</p>
 <h2>Input of this project</h2>
 <p>The input is on <a href="http://www.satcompetition.org/2009/format-benchmarks2009.html">DIMACS</a> formula with the extension .cnf.</p>
-<p>Let's take as the <strong>accept.cnf</strong> from our previous example: The Boolean formula $(x_{1} \oplus x_{2}) \wedge (x_{2} \oplus \rightharpoondown x_{3})$ is</p>
+<p>Let's take as the <strong>accept.cnf</strong> from our previous example: The Boolean formula $(x_{1} \oplus x_{2}) \wedge (x_{2} \oplus x_{3})$ is</p>
 <pre><code>p cnf 3 2
 1 2 0
-2 -3 0
+2 3 0
 </code></pre>
 <ul>
 <li>
@@ -55,7 +55,7 @@ code.language-diff {background-color: while; color: red;}
 <p>The second line <strong>1 2 0</strong> means the clause $(x_{1} \oplus x_{2})$ (Note that, the number <em>0</em> means the end of the clause).</p>
 </li>
 <li>
-<p>The third line <strong>2 -3 0</strong> means the clause $(x_{2} \oplus \rightharpoondown x_{3})$ (Note that, the number <em>0</em> means the end of the clause).</p>
+<p>The third line <strong>2 3 0</strong> means the clause $(x_{2} \oplus x_{3})$ (Note that, the number <em>0</em> means the end of the clause).</p>
 </li>
 </ul>
 <h1>Compile and Environment</h1>
@@ -72,10 +72,10 @@ cd alma
 </code></pre>
 <p>Finally, it would obtain in the console output:</p>
 <pre><code>YES
-[1]
+[2]
 k = 1
 </code></pre>
-<p>which means the minimum amount of true variables is $k = 1$ for every possible satisfying truth assignment and the true variable is $x_{1}$ (i.e. $[1]$).</p>
+<p>which means the minimum amount of true variables is $k = 1$ for every possible satisfying truth assignment and the true variable is $x_{2}$ (i.e. $[2]$).</p>
 <p>If we take a non-acceptance instance</p>
 <pre><code>python solver.py -i reject.cnf
 </code></pre>
