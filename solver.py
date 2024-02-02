@@ -155,6 +155,7 @@ if __name__ == "__main__":
             if len(truth) == k+1:        
                 print("YES")
                 print(truth, sep=", ")
+                print(f"k = {len(truth)}")
                 accept = True
                 break
     if not accept:

@@ -14,7 +14,7 @@ This work is based on the manuscripts [Note for the Millennium Prize Problems](h
 
 - A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. A Boolean formula is in 2-conjunctive normal form or 2CNF, if each clause has exactly two distinct literals.
 
-- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Weighted Xor 2-satisfiability problem (WX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at most $k$ true variables using logic operators $\oplus$.
+- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Weighted Xor 2-satisfiability problem (WX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at most $k$ true variables using logic operators $\oplus$ (instead of using the operator $\vee$).
 
 Example
 ----- 
@@ -70,9 +70,12 @@ Finally, it would obtain in the console output:
 ```
 YES
 [1]
+k = 1
 ```
 
-otherwise if we take a non-acceptance instance 
+which means the minimum amount of true variables is $k = 1$ for every possible satisfying truth assignment and the true variable is $x_{1}$ (i.e. $[1]$).
+
+If we take a non-acceptance instance 
 
 ```
 python solver.py -i reject.cnf
