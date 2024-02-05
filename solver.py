@@ -1,6 +1,6 @@
 #                         MWX2SAT Solver
 #                          Frank Vega
-#                        February 2, 2024
+#                        February 4, 2024
 
 import argparse
 import sys
@@ -12,15 +12,18 @@ g = {}
 log = False
 timed = False
 started = 0.0
+userinput = 1
 
 def logging(message):
     if log:
         print(message)
 
 def graph(node):
-    global mapped, f, g, h
+    global mapped, f, g, h, userinput
     if node[0] >= len(mapped):
         return []
+    elif node[1] > userinput:
+        return [(node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
     else:
         return [(node[0]+1, node[1]+1, node[2]+f[node[0]+1], node[3]-g[node[0]+1]), 
         (node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
@@ -84,6 +87,7 @@ def fill_data(clauses):
 def parse_dimacs(asserts):
     global mapped, k, maximum
     result = []
+    cvars = 1
     for strvar in asserts:
         line = strvar.strip()
         if not line.startswith('p') and not line.startswith('c'):
@@ -101,7 +105,13 @@ def parse_dimacs(asserts):
                     raise Exception("The Boolean formula must not contain negated variables")
                 if value not in mapped:
                     mapped[value] = True
-            result.append(l)        
+            result.append(l)
+        elif line.startswith('p'):
+            expr = line.split(" ")
+            cvars = int(expr[2])
+    for i in range(cvars):
+        if (i + 1) not in mapped:
+            raise Exception(f"The Boolean formula must contain all variables between 1 and {cvars}")
     return result   
                        
 if __name__ == "__main__":
@@ -115,7 +125,18 @@ if __name__ == "__main__":
 
     log = args.verbose
     timed = args.timer
+    
+    #Read the parameter k
+    try: 
+        userinput = int(input("Enter the positive integer k:")) 
+    except ValueError: 
+        raise Exception("That's not an integer")
+    
+    if userinput <= 0:
+        raise Exception("That's not a positive integer")
+    print("You entered %d"%userinput)
 
+    
     #Read and parse a dimacs file
     logging("Pre-processing started")
     if timed:
@@ -123,7 +144,7 @@ if __name__ == "__main__":
     file = open(args.inputFile, 'r')
     #Format from dimacs
     asserts = file.readlines()    
-    clauses = parse_dimacs(asserts[1:])
+    clauses = parse_dimacs(asserts)
     
     if timed:
         logging(f"Pre-processing done in: {(time.time() - started) * 1000.0} milliseconds")
@@ -136,7 +157,7 @@ if __name__ == "__main__":
     (visited, hash) = bfs((0, 0, 0, 0))
     accept = False
     
-    for k in range(len(mapped)):
+    for k in range(userinput):
         acceptance = (len(mapped), k+1, 0, 0)
         if acceptance in visited:
             truth = []
@@ -149,7 +170,7 @@ if __name__ == "__main__":
             if len(truth) == k+1:        
                 print("YES")
                 print(truth, sep=", ")
-                print(f"k = {len(truth)}")
+                print(f"k = {k+1}")
                 accept = True
                 break
     if not accept:

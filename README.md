@@ -65,6 +65,13 @@ On alma directory run
 python solver.py -i accept.cnf
 ```
 
+Then, we should enter the value of the positive integer $k$:
+
+```
+Enter the positive integer k:1
+You entered 1
+```
+
 Finally, it would obtain in the console output:
 
 ```
@@ -73,7 +80,7 @@ YES
 k = 1
 ```
 
-which means the minimum amount of true variables is $k = 1$ for every possible satisfying truth assignment and the true variable is $x_{2}$ (i.e. $[2]$).
+which means there exist at most $k = 1$ true variables for a possible satisfying truth assignment and the true variable should be $x_{2}$ (i.e. $[2]$).
 
 If we take a non-acceptance instance 
 
@@ -86,6 +93,8 @@ then it would obtain in the console output:
 ```
 NO
 ```
+
+no matter how large or small we pick up the value of $k$ in this case.
 
 # Command Options
 

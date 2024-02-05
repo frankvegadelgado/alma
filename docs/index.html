@@ -70,18 +70,23 @@ cd alma
 <p>On alma directory run</p>
 <pre><code>python solver.py -i accept.cnf
 </code></pre>
+<p>Then, we should enter the value of the positive integer $k$:</p>
+<pre><code>Enter the positive integer k:1
+You entered 1
+</code></pre>
 <p>Finally, it would obtain in the console output:</p>
 <pre><code>YES
 [2]
 k = 1
 </code></pre>
-<p>which means the minimum amount of true variables is $k = 1$ for every possible satisfying truth assignment and the true variable is $x_{2}$ (i.e. $[2]$).</p>
+<p>which means there exist at most $k = 1$ true variables for a possible satisfying truth assignment and the true variable should be $x_{2}$ (i.e. $[2]$).</p>
 <p>If we take a non-acceptance instance</p>
 <pre><code>python solver.py -i reject.cnf
 </code></pre>
 <p>then it would obtain in the console output:</p>
 <pre><code>NO
 </code></pre>
+<p>no matter how large or small we pick up the value of $k$ in this case.</p>
 <h1>Command Options</h1>
 <p>On alma directory if you run</p>
 <pre><code>python solver.py -h
