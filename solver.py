@@ -1,6 +1,6 @@
 #                         MWX2SAT Solver
 #                          Frank Vega
-#                        February 4, 2024
+#                       February 27, 2024
 
 import argparse
 import sys
@@ -23,7 +23,8 @@ def graph(node):
     if node[0] >= len(mapped):
         return []
     elif node[1] > userinput:
-        return [(node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
+        return [(0, 0, 0, 0),
+        (node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
     else:
         return [(node[0]+1, node[1]+1, node[2]+f[node[0]+1], node[3]-g[node[0]+1]), 
         (node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
