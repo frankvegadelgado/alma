@@ -124,7 +124,7 @@ where it is described all the possible options.
 # Complexity
 
 ````diff
-+ We solve this problem in polynomial time using dynamic programming.
++ We solve this problem in polynomial time.
 + Consequently, we deduce that P = NP.
 ````
 

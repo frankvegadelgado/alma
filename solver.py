@@ -1,14 +1,12 @@
 #                         MWX2SAT Solver
 #                          Frank Vega
-#                       February 27, 2024
+#                       March 19, 2024
 
 import argparse
 import sys
-import collections
+import collections 
 import time
 mapped = {}
-f = {}
-g = {}
 log = False
 timed = False
 started = 0.0
@@ -18,75 +16,66 @@ def logging(message):
     if log:
         print(message)
 
-def graph(node):
-    global mapped, f, g, h, userinput
-    if node[0] >= len(mapped):
-        return []
-    elif node[1] > userinput:
-        return [(0, 0, 0, 0),
-        (node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
-    else:
-        return [(node[0]+1, node[1]+1, node[2]+f[node[0]+1], node[3]-g[node[0]+1]), 
-        (node[0]+1, node[1], node[2]-g[node[0]+1], node[3]+f[node[0]+1])]
-
-def bfs(start):
-    
+def is_bipartite(graph):
+    colors = {}  # Dictionary to store node colors (red or blue)
+    queue = collections.deque()
     logging("Start searching the solution")
     if timed:
         started = time.time()
-    
-    
-    visited = set()
-    queue = collections.deque([start])
-    visited.add(start)
-    hash = {}
-    
-    while queue:
-        node = queue.popleft()
-        neighbors = graph(node)
-        for neighbor in neighbors:
-            if neighbor not in visited:
-                hash[neighbor] = node
-                visited.add(neighbor)
-                queue.append(neighbor)
+    # Start BFS traversal from an arbitrary node
+    while len(colors) != len(graph):
+        weight = 0
+        node = -1
+        for vertex in graph:
+            if vertex not in colors:
+                uncolored = [y for y in graph[vertex] if y not in colors]
+                if len(uncolored) > weight:
+                    weight = len(uncolored)
+                    node = vertex
+        queue.append(node)
+        colors[node] = "red"  # Assign initial color (red)
+
+        while queue:
+            current_node = queue.popleft()
+            current_color = colors[current_node]
+
+            # Explore uncolored neighbors
+            for neighbor in graph[current_node]:
+                if neighbor not in colors:
+                    queue.append(neighbor)
+                    colors[neighbor] = "blue" if current_color == "red" else "red"
+                # If neighbor is already colored and same as current, graph is not bipartite
+                elif colors[neighbor] == current_color:
+                    return None  # Not bipartite
 
     if timed:
         logging(f"Done searching the solution in: {(time.time() - started) * 1000.0} milliseconds")
     else:
         logging("Done searching the solution")
+                    
+    return colors
+  
+def fill_graph(clauses):
+    global mapped
     
-                
-                
-    return (visited, hash)
-
-
-def fill_data(clauses):
-    global mapped, f, g, h
-    
-    logging("Start storing the memory data")
+    logging("Start creating the polynomial time reduction")
     if timed:
         started = time.time()
+    graph = {i: [] for i in range(len(mapped))}
     
-    for z in mapped:
-        f[z], g[z] = 0, 0
-        for list in clauses:
-            if z in list:
-                arr = [y for y in list if z != y]
-                if z < arr[0]:
-                    f[z] = f[z] + 1
-                else:
-                    g[z] = g[z] + 1
-                
-                            
+    
+    for list in clauses:
+        graph[list[0] - 1].append(list[1] - 1)        
+        graph[list[1] - 1].append(list[0] - 1)                    
     if timed:
-        logging(f"Done storing the memory data in: {(time.time() - started) * 1000.0} milliseconds")
+        logging(f"Done polynomial time reduction in: {(time.time() - started) * 1000.0} milliseconds")
     else:
-        logging("Done storing the memory data")
-    
+        logging("Done polynomial time reduction")
+    return graph
             
 
 def parse_dimacs(asserts):
-    global mapped, k, maximum
+    global mapped
     result = []
     cvars = 1
     for strvar in asserts:
@@ -152,27 +141,20 @@ if __name__ == "__main__":
     else:
         logging("Pre-processing done")
     
-    fill_data(clauses)
+    graph = fill_graph(clauses)
     
     
-    (visited, hash) = bfs((0, 0, 0, 0))
-    accept = False
-    
-    for k in range(userinput):
-        acceptance = (len(mapped), k+1, 0, 0)
-        if acceptance in visited:
-            truth = []
-            while acceptance != (0, 0, 0, 0):
-                node = hash[acceptance]
-                neighbors = graph(node)
-                if neighbors[0] == acceptance:
-                    truth.append(acceptance[0])
-                acceptance = node
-            if len(truth) == k+1:        
-                print("YES")
-                print(truth, sep=", ")
-                print(f"k = {k+1}")
-                accept = True
-                break
-    if not accept:
+    coloring = is_bipartite(graph)
+
+    if coloring is None:
         print("NO")
+    else:
+        answer = [(y+1) for y in coloring if coloring[y] == "red"] 
+        
+        if len(answer) <= userinput:
+            print("YES")
+            print(answer, sep=", ")
+            print(f"k = {len(answer)}")
+        else:
+            print("NO")
+        
