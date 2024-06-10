@@ -1,4 +1,4 @@
-# ALMA| MWX2SAT Solver
+# ALMA—MWX2SAT Solver
 
 Instance: An $n$-variable $2CNF$ formula with monotone clauses (meaning the variables are never negated) using logic operators $\oplus$ (instead of using the operator $\vee$) and a positive integer $k$.
 
@@ -8,7 +8,7 @@ Question: Is there exists a satisfying truth assignment in which at most $k$ of 
 
 # Research
 
-This work is based on the manuscripts [Note for the Millennium Prize Problems](https://www.researchgate.net/publication/377808644_Note_for_the_Millennium_Prize_Problems) and [Note for the P versus NP Problem](https://www.researchgate.net/publication/377656601_Note_for_the_P_versus_NP_Problem).
+This work is based on the following published article: [Note for the P versus NP Problem](https://doi.org/10.59973/ipil.92).
 
 # Theory
 
