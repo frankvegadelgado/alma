@@ -21,24 +21,26 @@ def independent_vertex_cover(graph):
     if timed:
         started = time.time()
     
+    solution = []
+    
     if networkx.algorithms.bipartite.is_bipartite(graph):
-        cover = []
         components = networkx.connected_components(graph)
         for component in components:    
             G = networkx.Graph(networkx.induced_subgraph(graph, component))
             matching = networkx.bipartite.maximum_matching(G)
             vertex_cover = networkx.bipartite.to_vertex_cover(G, matching)
-            cover = cover + list(vertex_cover)
-        return cover
-    else:
-        return None
+            solution = solution + list(vertex_cover)
     
     if timed:
         logging(f"Done searching the solution in: {(time.time() - started) * 1000.0} milliseconds")
     else:
         logging("Done searching the solution")
-                    
-    return colors
+    
+    if len(solution) > 0:
+        return solution
+    else:
+        return None
+    
   
 def fill_graph(clauses):
     global mapped
@@ -57,6 +59,7 @@ def fill_graph(clauses):
         logging(f"Done polynomial time reduction in: {(time.time() - started) * 1000.0} milliseconds")
     else:
         logging("Done polynomial time reduction")
+    
     return graph
             
 
