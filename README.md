@@ -46,7 +46,15 @@ p cnf 3 2
 Downloading and Installing
 -----
 
-Download and Install Python 3.0 or a greater version 
+Install Python 3.10, 3.11, or 3.12.
+
+Download and Install the NetworkX's Library and its dependencies 
+
+If you use pip, you can install NetworkX's Library and its dependencies with:
+-----
+```
+pip install networkx[default]
+```
 
 -----
 

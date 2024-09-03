@@ -1,11 +1,11 @@
 #                         MWX2SAT Solver
 #                          Frank Vega
-#                       March 19, 2024
+#                       Sept 3rd, 2024
 
 import argparse
 import sys
-import collections 
 import time
+import networkx 
 mapped = {}
 log = False
 timed = False
@@ -16,38 +16,23 @@ def logging(message):
     if log:
         print(message)
 
-def is_bipartite(graph):
-    colors = {}  # Dictionary to store node colors (red or blue)
-    queue = collections.deque()
+def independent_vertex_cover(graph):
     logging("Start searching the solution")
     if timed:
         started = time.time()
-    # Start BFS traversal from an arbitrary node
-    while len(colors) != len(graph):
-        weight = 0
-        node = -1
-        for vertex in graph:
-            if vertex not in colors:
-                uncolored = [y for y in graph[vertex] if y not in colors]
-                if len(uncolored) > weight:
-                    weight = len(uncolored)
-                    node = vertex
-        queue.append(node)
-        colors[node] = "red"  # Assign initial color (red)
-
-        while queue:
-            current_node = queue.popleft()
-            current_color = colors[current_node]
-
-            # Explore uncolored neighbors
-            for neighbor in graph[current_node]:
-                if neighbor not in colors:
-                    queue.append(neighbor)
-                    colors[neighbor] = "blue" if current_color == "red" else "red"
-                # If neighbor is already colored and same as current, graph is not bipartite
-                elif colors[neighbor] == current_color:
-                    return None  # Not bipartite
-
+    
+    if networkx.algorithms.bipartite.is_bipartite(graph):
+        cover = []
+        components = networkx.connected_components(graph)
+        for component in components:    
+            G = networkx.Graph(networkx.induced_subgraph(graph, component))
+            matching = networkx.bipartite.maximum_matching(G)
+            vertex_cover = networkx.bipartite.to_vertex_cover(G, matching)
+            cover = cover + list(vertex_cover)
+        return cover
+    else:
+        return None
+    
     if timed:
         logging(f"Done searching the solution in: {(time.time() - started) * 1000.0} milliseconds")
     else:
@@ -61,12 +46,13 @@ def fill_graph(clauses):
     logging("Start creating the polynomial time reduction")
     if timed:
         started = time.time()
-    graph = {i: [] for i in range(len(mapped))}
+    edges = []
     
     
     for list in clauses:
-        graph[list[0] - 1].append(list[1] - 1)        
-        graph[list[1] - 1].append(list[0] - 1)                    
+        edges.append((list[0], list[1]))        
+    graph = networkx.Graph()
+    graph.add_edges_from(edges)  
     if timed:
         logging(f"Done polynomial time reduction in: {(time.time() - started) * 1000.0} milliseconds")
     else:
@@ -144,13 +130,11 @@ if __name__ == "__main__":
     graph = fill_graph(clauses)
     
     
-    coloring = is_bipartite(graph)
+    answer = independent_vertex_cover(graph)
 
-    if coloring is None:
+    if answer is None:
         print("NO")
     else:
-        answer = [(y+1) for y in coloring if coloring[y] == "red"] 
-        
         if len(answer) <= userinput:
             print("YES")
             print(answer, sep=", ")
