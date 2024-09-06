@@ -1,6 +1,6 @@
 #                         MWX2SAT Solver
 #                          Frank Vega
-#                       Sept 3rd, 2024
+#                       Sept 5th, 2024
 
 import argparse
 import sys
@@ -26,10 +26,14 @@ def independent_vertex_cover(graph):
     if networkx.algorithms.bipartite.is_bipartite(graph):
         components = networkx.connected_components(graph)
         for component in components:    
-            G = networkx.Graph(networkx.induced_subgraph(graph, component))
-            matching = networkx.bipartite.maximum_matching(G)
-            vertex_cover = networkx.bipartite.to_vertex_cover(G, matching)
-            solution = solution + list(vertex_cover)
+            G = networkx.induced_subgraph(graph, component)
+            coloring = networkx.bipartite.color(G)
+            blue = [y for y in coloring if coloring[y] == 0]
+            red = [y for y in coloring if coloring[y] == 1]
+            if len(blue) < len(red):
+                solution = solution + blue
+            else:
+                solution = solution + red
     
     if timed:
         logging(f"Done searching the solution in: {(time.time() - started) * 1000.0} milliseconds")
