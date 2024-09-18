@@ -1,6 +1,6 @@
 #                         MWX2SAT Solver
 #                          Frank Vega
-#                       Sept 18th, 2024
+#                       September 18, 2024
 
 import argparse
 import sys

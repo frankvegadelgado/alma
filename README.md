@@ -1,4 +1,7 @@
 # ALMA—MWX2SAT Solver
+![](docs/submission_92_coverImage_en_US.jpg)
+
+# MWX2SAT Problem
 
 Instance: An $n$-variable $2CNF$ formula with monotone clauses (meaning the variables are never negated) using logic operators $\oplus$ (instead of using the operator $\vee$) and a positive integer $k$.
 
@@ -14,7 +17,7 @@ This work is based on the following published article: [Note for the P versus NP
 
 - A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. A Boolean formula is in 2-conjunctive normal form or 2CNF, if each clause has exactly two distinct literals.
 
-- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Monotone Weighted Xor 2-satisfiability problem (MX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at least $k$ true variables using logic operators $\oplus$ on monotone clauses.
+- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Monotone Weighted Xor 2-satisfiability problem (MWX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at least $k$ true variables using logic operators $\oplus$ on monotone clauses.
 
 Example
 ----- 
