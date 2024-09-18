@@ -1,11 +1,11 @@
 #                         MWX2SAT Solver
 #                          Frank Vega
-#                       Sept 16th, 2024
+#                       Sept 18th, 2024
 
 import argparse
 import sys
 import time
-import networkx 
+import networkx as nx
 mapped = {}
 log = False
 timed = False
@@ -16,51 +16,44 @@ def logging(message):
     if log:
         print(message)
 
-def independent_vertex_cover(graph):
-    logging("Start searching the solution")
-    if timed:
-        started = time.time()
-    
-    solution = 0
-    
-    if networkx.algorithms.bipartite.is_bipartite(graph):
-        components = networkx.connected_components(graph)
-        for component in components:    
-            G = networkx.induced_subgraph(graph, component)
-            matching = networkx.max_weight_matching(G)
-            solution += len(matching)
-    
-    if timed:
-        logging(f"Done searching the solution in: {(time.time() - started) * 1000.0} milliseconds")
-    else:
-        logging("Done searching the solution")
-    
-    if solution > 0:
-        return solution
+def solution(graph):
+    """
+    Finds the maximum independent set in a bipartite graph.
+
+    Args:
+        graph: A NetworkX Graph object representing the bipartite graph.
+
+    Returns:
+        A list of nodes in the maximum independent set, or None if the graph is not bipartite.
+    """
+
+    solution = []
+
+    if nx.algorithms.bipartite.is_bipartite(graph):
+        components = nx.connected_components(graph)
+        for component in components:
+            G = nx.induced_subgraph(graph, component)
+            matching = nx.bipartite.maximum_matching(G)
+            vertex_cover = nx.bipartite.to_vertex_cover(G, matching)
+            independent_set = set(G) - vertex_cover
+            solution = solution + list(independent_set)
     else:
         return None
-    
+
+    return solution
   
 def fill_graph(clauses):
     global mapped
     
-    logging("Start creating the polynomial time reduction")
-    if timed:
-        started = time.time()
     edges = []
-    
     
     for list in clauses:
         edges.append((list[0], list[1]))        
-    graph = networkx.Graph()
+    
+    graph = nx.Graph()
     graph.add_edges_from(edges)  
-    if timed:
-        logging(f"Done polynomial time reduction in: {(time.time() - started) * 1000.0} milliseconds")
-    else:
-        logging("Done polynomial time reduction")
     
     return graph
-            
 
 def parse_dimacs(asserts):
     global mapped
@@ -114,7 +107,6 @@ if __name__ == "__main__":
         raise Exception("That's not a positive integer")
     print("You entered %d"%userinput)
 
-    
     #Read and parse a dimacs file
     logging("Pre-processing started")
     if timed:
@@ -129,17 +121,34 @@ if __name__ == "__main__":
     else:
         logging("Pre-processing done")
     
+    logging("Start creating the polynomial time reduction")
+    if timed:
+        started = time.time()
+    
     graph = fill_graph(clauses)
     
+    if timed:
+        logging(f"Done polynomial time reduction in: {(time.time() - started) * 1000.0} milliseconds")
+    else:
+        logging("Done polynomial time reduction")
     
-    answer = independent_vertex_cover(graph)
-
+    logging("Start searching the solution")
+    if timed:
+        started = time.time()
+    
+    answer = solution(graph)
+    
+    if timed:
+        logging(f"Done searching the solution in: {(time.time() - started) * 1000.0} milliseconds")
+    else:
+        logging("Done searching the solution")
+    
     if answer is None:
         print("NO")
     else:
-        if answer <= userinput:
+        if len(answer) >= userinput:
             print("YES")
-            print(f"k = {answer}")
+            print(answer, sep=", ")
+            print(f"k = {len(answer)}")
         else:
             print("NO")
-        

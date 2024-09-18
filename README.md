@@ -2,7 +2,7 @@
 
 Instance: An $n$-variable $2CNF$ formula with monotone clauses (meaning the variables are never negated) using logic operators $\oplus$ (instead of using the operator $\vee$) and a positive integer $k$.
 
-Question: Is there exists a satisfying truth assignment in which at most $k$ of the variables are true?
+Question: Is there exists a satisfying truth assignment in which at least $k$ of the variables are true?
  
 **Note: This problem is NP-complete (If any NP-complete can be solved in polynomial time, then $P = NP$)**.
 
@@ -14,7 +14,7 @@ This work is based on the following published articles: [Note for the P versus N
 
 - A literal in a Boolean formula is an occurrence of a variable or its negation. A Boolean formula is in conjunctive normal form, or CNF, if it is expressed as an AND of clauses, each of which is the OR of one or more literals. A Boolean formula is in 2-conjunctive normal form or 2CNF, if each clause has exactly two distinct literals.
 
-- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Monotone Weighted Xor 2-satisfiability problem (MWX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at most $k$ true variables using logic operators $\oplus$ on monotone clauses.
+- A truth assignment for a Boolean formula $\phi$ is a set of values for the variables in $\phi$. The problem Monotone Weighted Xor 2-satisfiability problem (MX2SAT) asks whether a given Boolean formula $\phi$ in 2CNF has a satisfying truth assignment with at least $k$ true variables using logic operators $\oplus$ on monotone clauses.
 
 Example
 ----- 
@@ -76,18 +76,19 @@ python solver.py -i accept.cnf
 Then, we should enter the value of the positive integer $k$:
 
 ```
-Enter the positive integer k:2
-You entered 2
+Enter the positive integer k:1
+You entered 1
 ```
 
 Finally, it would obtain in the console output:
 
 ```
 YES
+[1, 3]
 k = 1
 ```
 
-which means there exist at minimum exactly $k = 1$ true variables for a possible satisfying truth assignment.
+which means there exist at least $k = 2$ true variables for a possible satisfying truth assignment and the true variable should be $x_{1}$ and $x_{3}$ (i.e. $[1, 3]$).
 
 If we take a non-acceptance instance 
 
