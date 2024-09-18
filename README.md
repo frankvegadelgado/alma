@@ -8,7 +8,7 @@ Question: Is there exists a satisfying truth assignment in which at most $k$ of 
 
 # Research
 
-This work is based on the following published article: [Note for the P versus NP Problem](https://doi.org/10.59973/ipil.92).
+This work is based on the following published articles: [Note for the P versus NP Problem](https://doi.org/10.59973/ipil.92) and [Solving NP-complete Problems Efficiently](https://doi.org/10.59973/ipil.122).
 
 # Theory
 
