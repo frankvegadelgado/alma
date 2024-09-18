@@ -48,7 +48,7 @@ Downloading and Installing
 
 Install Python 3.10, 3.11, or 3.12.
 
-Download and Install the NetworkX's Library and its dependencies 
+Download and Install the NetworkX's Library version 3.3 and its dependencies 
 
 If you use pip, you can install NetworkX's Library and its dependencies with:
 -----
@@ -76,19 +76,18 @@ python solver.py -i accept.cnf
 Then, we should enter the value of the positive integer $k$:
 
 ```
-Enter the positive integer k:1
-You entered 1
+Enter the positive integer k:2
+You entered 2
 ```
 
 Finally, it would obtain in the console output:
 
 ```
 YES
-[2]
 k = 1
 ```
 
-which means there exist at most $k = 1$ true variables for a possible satisfying truth assignment and the true variable should be $x_{2}$ (i.e. $[2]$).
+which means there exist at minimum exactly $k = 1$ true variables for a possible satisfying truth assignment.
 
 If we take a non-acceptance instance 
 
