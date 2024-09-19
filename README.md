@@ -88,10 +88,10 @@ Finally, it would obtain in the console output:
 ```
 YES
 [1, 3]
-k = 1
+k = 2
 ```
 
-which means there exist at least $k = 2$ true variables for a possible satisfying truth assignment and the true variable should be $x_{1}$ and $x_{3}$ (i.e. $[1, 3]$).
+which means there exist at least $k = 2$ true variables for a satisfying truth assignment where the true variables would be $x_{1}$ and $x_{3}$ (i.e. $[1, 3]$).
 
 If we take a non-acceptance instance 
 
